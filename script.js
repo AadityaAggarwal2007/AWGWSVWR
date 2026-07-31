@@ -30,6 +30,7 @@ function onScreenEnter(screenId) {
   switch (screenId) {
     case 'screen-hello':
       typeText('hello-text', 'Hey Nandini... I made something just for you. Continue?', 40);
+      setTimeout(initRunawayNo, 100);
       break;
     case 'screen-achievement':
       spawnFloatingHearts('ach-hearts', 8);
@@ -93,22 +94,80 @@ function typeText(elementId, text, speed) {
 }
 
 
-// ── Shake NO Button ──
-function shakeNo() {
+// ── Runaway NO Button ──
+let noAttempts = 0;
+
+function initRunawayNo() {
   const btn = document.getElementById('btn-no');
-  btn.classList.add('shake');
-  btn.textContent = '😾 NO';
+  const container = document.getElementById('screen-hello');
 
-  setTimeout(() => {
-    btn.classList.remove('shake');
-  }, 500);
+  btn.addEventListener('mouseenter', runAwayFromCursor);
+}
 
-  // After 2 shakes, disable the button
-  setTimeout(() => {
-    btn.textContent = 'FINE...';
-    btn.style.opacity = '0.5';
-    btn.style.pointerEvents = 'none';
-  }, 1200);
+function runAwayFromCursor() {
+  const btn = document.getElementById('btn-no');
+  const container = document.getElementById('screen-hello');
+  const cRect = container.getBoundingClientRect();
+  const bRect = btn.getBoundingClientRect();
+
+  noAttempts++;
+
+  // Fun messages that cycle
+  const msgs = ['NOPE!', 'NAH!', 'NOOOO!', 'CATCH ME!', 'NEVER!', 'HEHE!', 'TRY AGAIN!'];
+  btn.textContent = msgs[noAttempts % msgs.length];
+
+  // Make it position: fixed to move freely
+  if (btn.style.position !== 'fixed') {
+    btn.style.position = 'fixed';
+    btn.style.left = bRect.left + 'px';
+    btn.style.top = bRect.top + 'px';
+    btn.style.zIndex = '9998';
+    btn.style.margin = '0';
+  }
+
+  const btnW = bRect.width;
+  const btnH = bRect.height;
+  const margin = 20;
+
+  const maxX = window.innerWidth - btnW - margin;
+  const maxY = window.innerHeight - btnH - margin;
+
+  let newX, newY;
+  const tries = 20;
+  for (let i = 0; i < tries; i++) {
+    newX = margin + Math.random() * maxX;
+    newY = margin + Math.random() * maxY;
+    const curX = parseFloat(btn.style.left);
+    const curY = parseFloat(btn.style.top);
+    if (Math.abs(newX - curX) > 80 || Math.abs(newY - curY) > 80) break;
+  }
+
+  btn.style.transition = 'left 0.15s, top 0.15s';
+  btn.style.left = newX + 'px';
+  btn.style.top = newY + 'px';
+
+  // After 5 attempts, give up and go to YES
+  if (noAttempts >= 5) {
+    btn.removeEventListener('mouseenter', runAwayFromCursor);
+    btn.textContent = 'FINE... YES 😩';
+    btn.style.transition = 'left 0.4s, top 0.4s';
+
+    // Fly it to the center
+    btn.style.left = (window.innerWidth / 2 - 70) + 'px';
+    btn.style.top = (window.innerHeight / 2) + 'px';
+
+    setTimeout(() => {
+      btn.style.position = '';
+      btn.style.left = '';
+      btn.style.top = '';
+      btn.style.zIndex = '';
+      goToScreen('screen-achievement');
+    }, 800);
+  }
+}
+
+function shakeNo() {
+  // Legacy — now handled by initRunawayNo
 }
 
 
@@ -229,6 +288,13 @@ function replayAll() {
   btnNo.textContent = 'NO';
   btnNo.style.opacity = '1';
   btnNo.style.pointerEvents = 'auto';
+  btnNo.style.position = '';
+  btnNo.style.left = '';
+  btnNo.style.top = '';
+  btnNo.style.zIndex = '';
+  btnNo.style.transition = '';
+  noAttempts = 0;
+  btnNo.removeEventListener('mouseenter', runAwayFromCursor);
 
   // Go to loading
   goToScreen('screen-loading');
