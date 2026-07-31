@@ -99,9 +99,14 @@ let noAttempts = 0;
 
 function initRunawayNo() {
   const btn = document.getElementById('btn-no');
-  const container = document.getElementById('screen-hello');
 
   btn.addEventListener('mouseenter', runAwayFromCursor);
+
+  // Mobile: fire on touchstart so it jumps BEFORE she can lift her finger
+  btn.addEventListener('touchstart', function(e) {
+    e.preventDefault(); // stop the tap from registering as a click
+    runAwayFromCursor();
+  }, { passive: false });
 }
 
 function runAwayFromCursor() {
@@ -283,18 +288,14 @@ function replayAll() {
   // Reset inventory continue
   document.getElementById('inventory-continue').style.display = 'none';
 
-  // Reset NO button
+  // Reset NO button — clone it to strip ALL event listeners
   const btnNo = document.getElementById('btn-no');
-  btnNo.textContent = 'NO';
-  btnNo.style.opacity = '1';
-  btnNo.style.pointerEvents = 'auto';
-  btnNo.style.position = '';
-  btnNo.style.left = '';
-  btnNo.style.top = '';
-  btnNo.style.zIndex = '';
-  btnNo.style.transition = '';
+  const freshBtn = btnNo.cloneNode(true);
+  freshBtn.textContent = 'NO';
+  freshBtn.style.cssText = '';
+  freshBtn.setAttribute('onclick', 'shakeNo()');
+  btnNo.parentNode.replaceChild(freshBtn, btnNo);
   noAttempts = 0;
-  btnNo.removeEventListener('mouseenter', runAwayFromCursor);
 
   // Go to loading
   goToScreen('screen-loading');
