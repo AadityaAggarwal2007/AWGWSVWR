@@ -1,0 +1,805 @@
+/* ============================================================
+   LOVE.EXE — Retro 90s OS Pixel Art Stylesheet
+   ============================================================ */
+
+/* === RESET & BASE === */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #FDFBF7;
+  --header: #A8C9E6;
+  --black: #000000;
+  --red: #D34242;
+  --blue: #6B89D9;
+  --accent: #FF6B6B;
+  --cream: #FFF8F0;
+  --shadow: 4px 4px 0px 0px #000;
+  --shadow-small: 2px 2px 0px 0px #000;
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-vt: 'VT323', monospace;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-pixel);
+  background-color: var(--bg);
+  color: var(--black);
+  image-rendering: pixelated;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scanline overlay for retro feel */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.015) 2px,
+    rgba(0, 0, 0, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* === SCREENS === */
+.screen {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* === LOADING SCREEN === */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.pixel-heart {
+  width: 64px;
+  height: 58px;
+  position: relative;
+  background: var(--red);
+  clip-path: polygon(
+    25% 0%, 37.5% 0%, 50% 12.5%, 62.5% 0%, 75% 0%,
+    100% 25%, 100% 37.5%, 50% 100%, 0% 37.5%, 0% 25%
+  );
+  /* Pixel-style heart using box-shadow technique */
+}
+
+/* Better pixel heart with actual pixels */
+.pixel-heart {
+  width: 0; height: 0;
+  box-shadow:
+    /* Row 1 */
+    4px  0px 0 0 var(--red),  5px  0px 0 0 var(--red),  6px  0px 0 0 var(--red),
+    10px 0px 0 0 var(--red), 11px 0px 0 0 var(--red), 12px 0px 0 0 var(--red),
+    /* Row 2 */
+    3px  1px 0 0 var(--red),  4px  1px 0 0 var(--red),  5px  1px 0 0 var(--red),
+    6px  1px 0 0 var(--red),  7px  1px 0 0 var(--red),
+    9px  1px 0 0 var(--red), 10px 1px 0 0 var(--red), 11px 1px 0 0 var(--red),
+    12px 1px 0 0 var(--red), 13px 1px 0 0 var(--red),
+    /* Row 3 */
+    2px  2px 0 0 var(--red),  3px  2px 0 0 var(--red),  4px  2px 0 0 var(--red),
+    5px  2px 0 0 var(--red),  6px  2px 0 0 var(--red),  7px  2px 0 0 var(--red),
+    8px  2px 0 0 var(--red),  9px  2px 0 0 var(--red), 10px 2px 0 0 var(--red),
+    11px 2px 0 0 var(--red), 12px 2px 0 0 var(--red), 13px 2px 0 0 var(--red),
+    14px 2px 0 0 var(--red),
+    /* Row 4 */
+    2px  3px 0 0 var(--red),  3px  3px 0 0 var(--red),  4px  3px 0 0 var(--red),
+    5px  3px 0 0 var(--red),  6px  3px 0 0 var(--red),  7px  3px 0 0 var(--red),
+    8px  3px 0 0 var(--red),  9px  3px 0 0 var(--red), 10px 3px 0 0 var(--red),
+    11px 3px 0 0 var(--red), 12px 3px 0 0 var(--red), 13px 3px 0 0 var(--red),
+    14px 3px 0 0 var(--red),
+    /* Row 5 */
+    3px  4px 0 0 var(--red),  4px  4px 0 0 var(--red),  5px  4px 0 0 var(--red),
+    6px  4px 0 0 var(--red),  7px  4px 0 0 var(--red),  8px  4px 0 0 var(--red),
+    9px  4px 0 0 var(--red), 10px 4px 0 0 var(--red), 11px 4px 0 0 var(--red),
+    12px 4px 0 0 var(--red), 13px 4px 0 0 var(--red),
+    /* Row 6 */
+    4px  5px 0 0 var(--red),  5px  5px 0 0 var(--red),  6px  5px 0 0 var(--red),
+    7px  5px 0 0 var(--red),  8px  5px 0 0 var(--red),  9px  5px 0 0 var(--red),
+    10px 5px 0 0 var(--red), 11px 5px 0 0 var(--red), 12px 5px 0 0 var(--red),
+    /* Row 7 */
+    5px  6px 0 0 var(--red),  6px  6px 0 0 var(--red),  7px  6px 0 0 var(--red),
+    8px  6px 0 0 var(--red),  9px  6px 0 0 var(--red), 10px 6px 0 0 var(--red),
+    11px 6px 0 0 var(--red),
+    /* Row 8 */
+    6px  7px 0 0 var(--red),  7px  7px 0 0 var(--red),  8px  7px 0 0 var(--red),
+    9px  7px 0 0 var(--red), 10px 7px 0 0 var(--red),
+    /* Row 9 */
+    7px  8px 0 0 var(--red),  8px  8px 0 0 var(--red),  9px  8px 0 0 var(--red),
+    /* Row 10 */
+    8px  9px 0 0 var(--red);
+  transform: scale(4);
+  margin: 60px;
+}
+
+.pixel-heart.pulse {
+  animation: heartPulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes heartPulse {
+  0%   { transform: scale(3.5); }
+  100% { transform: scale(4.5); }
+}
+
+.loading-text {
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-top: 40px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.loading-dots {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background: var(--black);
+  border: 2px solid var(--black);
+}
+
+.dot-1 { animation: dotLoad 1.2s 0s infinite; }
+.dot-2 { animation: dotLoad 1.2s 0.2s infinite; }
+.dot-3 { animation: dotLoad 1.2s 0.4s infinite; }
+
+@keyframes dotLoad {
+  0%, 60%, 100% { background: transparent; }
+  30%           { background: var(--black); }
+}
+
+
+/* === WINDOW CONTAINER === */
+.window {
+  width: 420px;
+  max-width: 94vw;
+  background: var(--cream);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  position: relative;
+  animation: windowOpen 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes windowOpen {
+  0%   { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.window-header {
+  background: var(--header);
+  border-bottom: 3px solid var(--black);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: default;
+  user-select: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-heart {
+  color: var(--red);
+  font-size: 12px;
+  font-family: var(--font-pixel);
+  animation: heartBeat 1.5s infinite;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.2); }
+}
+
+.header-title {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  font-weight: normal;
+  color: var(--black);
+}
+
+.header-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.control-btn {
+  width: 20px;
+  height: 20px;
+  background: var(--cream);
+  border: 2px solid var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: var(--font-vt);
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.control-btn:hover {
+  background: #ddd;
+}
+
+.control-btn:active {
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+
+/* === WINDOW BODY === */
+.window-body {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-height: 320px;
+}
+
+
+/* === CHARACTER AREA === */
+.character-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 0;
+}
+
+.character-img {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.bounce-in {
+  animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bounceIn {
+  0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+  60%  { transform: scale(1.1) rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+
+/* === TEXT BOX === */
+.text-box {
+  width: 100%;
+  background: #fff;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-small);
+  padding: 16px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogue {
+  font-family: var(--font-vt);
+  font-size: 22px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.dialogue .cursor {
+  display: inline-block;
+  width: 10px;
+  height: 18px;
+  background: var(--black);
+  vertical-align: text-bottom;
+  animation: blink 0.6s step-end infinite;
+  margin-left: 2px;
+}
+
+
+/* === BUTTONS === */
+.button-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.btn {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  padding: 12px 32px;
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  transition: transform 0.08s, box-shadow 0.08s;
+  user-select: none;
+}
+
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.btn-red {
+  background: var(--red);
+}
+
+.btn-red:hover {
+  background: #c03030;
+}
+
+.btn-blue {
+  background: var(--blue);
+}
+
+.btn-blue:hover {
+  background: #5a78c8;
+}
+
+.btn-wide {
+  width: 80%;
+  max-width: 300px;
+  text-align: center;
+}
+
+
+/* === LOVE POINTS === */
+.love-points {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: var(--accent);
+  text-align: center;
+  animation: pointsPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pointsPop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+/* === ACHIEVEMENT BOX === */
+.achievement-box {
+  background: #fff;
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideUp 0.5s ease 0.3s both;
+}
+
+.ach-heart {
+  color: var(--accent);
+  font-size: 20px;
+  animation: heartFloat 1.5s ease infinite alternate;
+}
+
+@keyframes heartFloat {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+.achievement-text {
+  font-family: var(--font-vt);
+  font-size: 20px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.achievement-text strong {
+  color: var(--accent);
+  font-family: var(--font-pixel);
+  font-size: 12px;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+
+/* === FLOATING HEARTS === */
+.floating-hearts {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; left: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 16px;
+  animation: floatUp 3s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-200px) scale(0.5) rotate(20deg); }
+}
+
+
+/* === INVENTORY === */
+.inventory-title {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  text-align: center;
+}
+
+.inventory-subtitle {
+  font-family: var(--font-vt);
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.inventory-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.inventory-item {
+  width: 100px;
+  height: 100px;
+  background: var(--cream);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+  font-family: var(--font-pixel);
+}
+
+.inventory-item:hover {
+  background: #FFF0E0;
+}
+
+.inventory-item:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.inventory-item.visited {
+  background: #E8F5E9;
+  border-color: #4a4;
+}
+
+.inventory-item.visited::after {
+  content: '✓';
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 10px;
+  color: #4a4;
+}
+
+.inventory-item {
+  position: relative;
+}
+
+.inv-icon {
+  font-size: 32px;
+}
+
+.inv-label {
+  font-size: 8px;
+  font-family: var(--font-pixel);
+}
+
+
+/* === ENVELOPE ANIMATION === */
+.envelope-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.envelope {
+  position: relative;
+  width: 120px;
+  height: 80px;
+  cursor: pointer;
+  animation: envelopeBounce 0.6s ease;
+}
+
+.envelope-body {
+  font-size: 72px;
+  text-align: center;
+  animation: envelopeOpen 0.8s ease 0.5s both;
+}
+
+@keyframes envelopeBounce {
+  0%   { transform: scale(0) rotate(-20deg); }
+  60%  { transform: scale(1.1) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes envelopeOpen {
+  0%   { transform: rotateX(0); }
+  50%  { transform: rotateX(-30deg); }
+  100% { transform: rotateX(0) scale(0.8); opacity: 0.5; }
+}
+
+
+/* === LETTER CONTENT === */
+.letter-content {
+  width: 100%;
+  animation: letterSlide 0.6s ease;
+}
+
+.letter-content.hidden {
+  display: none;
+}
+
+@keyframes letterSlide {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.letter-paper {
+  background: #FFFFF0;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-small);
+  padding: 20px;
+  max-height: 250px;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Lined paper effect */
+.letter-paper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 30px;
+  width: 1px; height: 100%;
+  background: rgba(255, 100, 100, 0.3);
+}
+
+.letter-text {
+  font-family: var(--font-vt);
+  font-size: 20px;
+  line-height: 1.8;
+  color: #333;
+  padding-left: 20px;
+}
+
+/* Letter paper scrollbar */
+.letter-paper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.letter-paper::-webkit-scrollbar-track {
+  background: #eee;
+  border: 1px solid var(--black);
+}
+
+.letter-paper::-webkit-scrollbar-thumb {
+  background: var(--header);
+  border: 1px solid var(--black);
+}
+
+
+/* === CONCLUSION SCREEN === */
+.conclusion-body {
+  position: relative;
+  overflow: hidden;
+}
+
+.congrats-text {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  text-align: center;
+  color: var(--red);
+  animation: congrats 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.congrats-sub {
+  font-family: var(--font-vt);
+  font-size: 24px;
+  text-align: center;
+  color: #555;
+  animation: slideUp 0.5s ease 0.3s both;
+}
+
+@keyframes congrats {
+  0%   { transform: scale(0) rotate(-5deg); }
+  60%  { transform: scale(1.2) rotate(2deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.reward-badge {
+  background: #FFD700;
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow);
+  padding: 12px 20px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  text-align: center;
+  animation: badgePop 0.5s ease 0.6s both;
+}
+
+@keyframes badgePop {
+  0%   { transform: scale(0); }
+  80%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+
+/* === SPARKLE EFFECTS === */
+.sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #FFD700;
+  animation: sparkle 1.5s ease infinite;
+  pointer-events: none;
+}
+
+.sparkle::before {
+  content: '✦';
+  font-size: 14px;
+  color: #FFD700;
+  position: absolute;
+  top: -4px;
+  left: -4px;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50%      { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+
+/* === UTILITY === */
+.hidden {
+  display: none !important;
+}
+
+
+/* === SHAKE ANIMATION (for NO button) === */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+}
+
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .window {
+    width: 96vw;
+  }
+
+  .window-body {
+    padding: 16px 12px;
+    min-height: 280px;
+  }
+
+  .character-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    font-size: 10px;
+  }
+
+  .inventory-item {
+    width: 80px;
+    height: 80px;
+  }
+
+  .dialogue {
+    font-size: 18px;
+  }
+
+  .letter-paper {
+    max-height: 200px;
+  }
+
+  .pixel-heart {
+    transform: scale(3);
+    margin: 40px;
+  }
+
+  .pixel-heart.pulse {
+    animation: heartPulseSmall 0.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes heartPulseSmall {
+    0%   { transform: scale(2.5); }
+    100% { transform: scale(3.5); }
+  }
+}
+
+
+/* === SCREEN TRANSITION === */
+.screen.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
+}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Love.exe - A cute retro pixel art love letter experience">
+  <title>Love.exe ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ======================== LOADING SCREEN ======================== -->
+    <div id="screen-loading" class="screen active">
+      <div class="loading-container">
+        <div class="pixel-heart pulse"></div>
+        <p class="loading-text">Loading...</p>
+        <div class="loading-dots">
+          <span class="dot dot-1"></span>
+          <span class="dot dot-2"></span>
+          <span class="dot dot-3"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 1: Hello.exe ======================== -->
+    <div id="screen-hello" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">Hello.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="character-area">
+            <img src="assets/pixel_cat.png" alt="Pixel Cat" class="character-img bounce-in" id="cat-img">
+          </div>
+          <div class="text-box">
+            <p class="dialogue" id="hello-text">Hey Nandini... I made something just for you. Continue?</p>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-red" id="btn-yes" onclick="goToScreen('screen-achievement')">YES</button>
+            <button class="btn btn-blue" id="btn-no" onclick="shakeNo()">NO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 2: Reward.exe ======================== -->
+    <div id="screen-achievement" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">Reward.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="character-area">
+            <img src="assets/pixel_bear.png" alt="Pixel Bear" class="character-img bounce-in">
+          </div>
+          <p class="love-points">+100 Love Points</p>
+          <div class="achievement-box">
+            <span class="ach-heart">♥</span>
+            <p class="achievement-text">Achievement Unlocked:<br><strong>Bestest Friend</strong></p>
+            <span class="ach-heart">♥</span>
+          </div>
+          <div class="floating-hearts" id="ach-hearts"></div>
+          <div class="button-row">
+            <button class="btn btn-red" onclick="goToScreen('screen-question')">CONTINUE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 3: Question.exe ======================== -->
+    <div id="screen-question" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">Question.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="character-area">
+            <img src="assets/pixel_cat.png" alt="Pixel Cat" class="character-img bounce-in">
+          </div>
+          <div class="text-box">
+            <p class="dialogue" id="question-text">Do you know how amazing you are?</p>
+          </div>
+          <div class="button-column" id="question-buttons">
+            <button class="btn btn-blue btn-wide" onclick="answerQuestion('not-really')">NOT REALLY</button>
+            <button class="btn btn-blue btn-wide" onclick="answerQuestion('maybe')">MAYBE</button>
+            <button class="btn btn-blue btn-wide" onclick="answerQuestion('of-course')">OF COURSE</button>
+          </div>
+          <div class="button-row hidden" id="question-next">
+            <button class="btn btn-red" onclick="goToScreen('screen-inventory')">NEXT</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 4: Inventory.exe ======================== -->
+    <div id="screen-inventory" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">Inventory.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <p class="inventory-title">Inventory</p>
+          <p class="inventory-subtitle">Click items to open</p>
+          <div class="inventory-grid">
+            <button class="inventory-item" onclick="openInventory('flowers')" id="inv-flowers">
+              <span class="inv-icon">🌷</span>
+              <span class="inv-label">Flowers</span>
+            </button>
+            <button class="inventory-item" onclick="openInventory('hugs')" id="inv-hugs">
+              <span class="inv-icon">💗</span>
+              <span class="inv-label">Hugs</span>
+            </button>
+            <button class="inventory-item" onclick="openInventory('letter')" id="inv-letter">
+              <span class="inv-icon">✉️</span>
+              <span class="inv-label">Letter</span>
+            </button>
+          </div>
+          <div class="button-row" id="inventory-continue" style="display:none;">
+            <button class="btn btn-red" onclick="inventoryContinue()">CONTINUE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 4A: Flowers.exe ======================== -->
+    <div id="screen-flowers" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">flowers.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="character-area">
+            <img src="assets/pixel_bear_flowers.png" alt="Bear with Flowers" class="character-img bounce-in">
+          </div>
+          <div class="text-box">
+            <p class="dialogue">For you 🌹</p>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-red" onclick="backToInventory('flowers')">BACK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 4B: Hugs.exe ======================== -->
+    <div id="screen-hugs" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">hugs.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="character-area">
+            <img src="assets/pixel_bears_hugging.png" alt="Bears Hugging" class="character-img bounce-in">
+          </div>
+          <div class="floating-hearts" id="hug-hearts"></div>
+          <div class="text-box">
+            <p class="dialogue">*virtual hugs* 💕</p>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-red" onclick="backToInventory('hugs')">BACK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 4C: Inbox.exe ======================== -->
+    <div id="screen-letter" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">Inbox.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body">
+          <div class="envelope-animation" id="envelope-anim">
+            <div class="envelope" id="envelope">
+              <div class="envelope-flap"></div>
+              <div class="envelope-body">✉️</div>
+            </div>
+          </div>
+          <div class="letter-content hidden" id="letter-content">
+            <div class="letter-paper">
+              <p class="letter-text">
+                Dear Nandini,<br><br>
+                I just want you to know how lucky I feel that I have you in my life. Like, genuinely, truly lucky. You are such a great person and I don't think you even realize it sometimes.<br><br>
+                I love your eyes. The way they light up when you talk about something you care about. I love your hair. I love your smile, the one that makes everything feel okay even on the worst days. And especially your personality. The way you are with people, the way you care, the way you just... be you.<br><br>
+                I appreciate every little thing you do, sweetheart. Every small gesture, every laugh you share, every moment you make brighter just by being there. You don't even have to try and you make everything better.<br><br>
+                The world is better because you are in it. And my world is better because you are in mine. Never forget that. 💕<br><br>
+                With all my love,<br>
+                Yours forever ❤️
+              </p>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-red" onclick="backToInventory('letter')">BACK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== HEART LOADING TRANSITION ======================== -->
+    <div id="screen-heart-loading" class="screen">
+      <div class="loading-container">
+        <div class="pixel-heart pulse"></div>
+        <div class="loading-dots">
+          <span class="dot dot-1"></span>
+          <span class="dot dot-2"></span>
+          <span class="dot dot-3"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================== SCREEN 6: Conclusion ======================== -->
+    <div id="screen-conclusion" class="screen">
+      <div class="window">
+        <div class="window-header">
+          <div class="header-left">
+            <span class="header-heart">❤</span>
+            <span class="header-title">Love.exe</span>
+          </div>
+          <div class="header-controls">
+            <span class="control-btn">─</span>
+            <span class="control-btn">□</span>
+            <span class="control-btn">×</span>
+          </div>
+        </div>
+        <div class="window-body conclusion-body">
+          <div class="sparkle-container" id="sparkles"></div>
+          <div class="character-area">
+            <img src="assets/pixel_bear_celebrate.png" alt="Celebrating Bear" class="character-img bounce-in">
+          </div>
+          <p class="congrats-text">Congratulations!</p>
+          <p class="congrats-sub">You completed Love.exe</p>
+          <div class="reward-badge">
+            <span>REWARD: ∞ Love Points</span>
+          </div>
+          <div class="floating-hearts" id="final-hearts"></div>
+          <div class="button-row">
+            <button class="btn btn-blue" onclick="replayAll()">REPLAY</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
